@@ -397,6 +397,7 @@ class ComputationGraph:
                         <TD COLSPAN="2">{output_str}: </TD>
                         <TD COLSPAN="2">{output_repr} </TD>
                     </TR>
+                    {f'<TR><TD COLSPAN="5">{node.relpath}, line {node.lineno}<BR/>{node.line}</TD></TR>' if getattr(node, 'relpath', None) else ''}
                     </TABLE>>'''
         else:
             label = f'''<
@@ -408,7 +409,7 @@ class ComputationGraph:
 
     def resize_graph(
         self,
-        scale: float = 1.0,
+        scale: float = 2,
         size_per_element: float = 0.3,
         min_size: float = 12
     ) -> None:

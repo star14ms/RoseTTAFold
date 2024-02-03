@@ -13,6 +13,9 @@ from .computation_graph import ComputationGraph
 
 from .utils import OrderedSet
 
+import traceback
+import os
+
 # Needed for module wrapper and resetting
 _orig_module_forward = torch.nn.Module.__call__
 
@@ -119,6 +122,16 @@ def module_forward_wrapper(model_graph: ComputationGraph) -> Callable[..., Any]:
         cur_node.set_input_shape(
             reduce_data_info([args, kwargs], collect_shape, [])
         )
+        stack = traceback.extract_stack()
+        cur_node.relpath = stack[-2].filename.split(os.getcwd() + '/')[-1].split('site-packages/')[-1]
+        cur_node.filename = stack[-2].filename
+        cur_node.lineno = stack[-2].lineno
+        cur_node.line = stack[-2].line.split('#')[0].replace('>', '&gt;').replace('<', '&lt;')
+
+        # if cur_depth <= 4:
+        #     from rich import print
+        #     print(f'{cur_node.filename}, line {cur_node.lineno}')
+        #     breakpoint()
 
         # update context with current modules's context
         input_context.append({cur_node: []})
@@ -257,6 +270,17 @@ class RecorderTensor(torch.Tensor):
             func, cur_depth, args_nodes, name=func_name  # type: ignore[arg-type]
         )
 
+        stack = traceback.extract_stack()
+        cur_node.relpath = stack[-2].filename.split(os.getcwd() + '/')[-1].split('site-packages/')[-1]
+        cur_node.filename = stack[-2].filename
+        cur_node.lineno = stack[-2].lineno
+        cur_node.line = stack[-2].line.split('#')[0].replace('>', '&gt;').replace('<', '&lt;')
+
+        # if cur_depth <= 4:
+        #     from rich import print
+        #     print(f'{cur_node.filename}, line {cur_node.lineno}')
+        #     breakpoint()
+        
         for i in args_nodes:
             i.add_child(cur_node)
 
