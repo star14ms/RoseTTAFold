@@ -96,6 +96,8 @@ class Predictor():
         self.model_name = "RoseTTAFold"
         if torch.cuda.is_available() and (not use_cpu):
             self.device = torch.device("cuda")
+        elif torch.backends.mps.is_available() and torch.backends.mps.is_built() and (not use_cpu):
+            self.device = torch.device("mps")
         else:
             self.device = torch.device("cpu")
         self.active_fn = nn.Softmax(dim=1)
@@ -121,13 +123,13 @@ class Predictor():
         #
         if templ_npz != None:
             templ = np.load(templ_npz)
-            xyz_t = torch.from_numpy(templ["xyz_t"])
-            t1d = torch.from_numpy(templ["t1d"])
-            t0d = torch.from_numpy(templ["t0d"])
+            xyz_t = torch.from_numpy(templ["xyz_t"], device=self.device)
+            t1d = torch.from_numpy(templ["t1d"], device=self.device)
+            t0d = torch.from_numpy(templ["t0d"], device=self.device)
         else:
-            xyz_t = torch.full((1, L, 3, 3), np.nan).float()
-            t1d = torch.zeros((1, L, 3)).float()
-            t0d = torch.zeros((1,3)).float()
+            xyz_t = torch.full((1, L, 3, 3), np.nan, device=self.device).float()
+            t1d = torch.zeros((1, L, 3), device=self.device).float()
+            t0d = torch.zeros((1,3), device=self.device).float()
        
         self.model.eval()
         with torch.no_grad():
