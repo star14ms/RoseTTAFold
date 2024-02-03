@@ -10,3 +10,4 @@ csblast-2.2.3/*
 output/*
 example/**/*
 data/*
+model_viz/*
