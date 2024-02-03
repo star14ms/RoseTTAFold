@@ -35,6 +35,8 @@ def parse_a3m(filename):
         # remove lowercase letters and append to MSA
         msa.append(line.translate(table))
 
+    msa = [''.join(msa)]
+
     # convert letters into numbers
     alphabet = np.array(list("ARNDCQEGHILKMFPSTWYV-"), dtype='|S1').view(np.uint8)
     msa = np.array([list(s) for s in msa], dtype='|S1').view(np.uint8)

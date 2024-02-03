@@ -166,7 +166,7 @@ class Predictor():
                         end_1 = min(grids[i]+window, L)
                         start_2 = grids[j]
                         end_2 = min(grids[j]+window, L)
-                        sel = np.zeros((L)).astype(np.bool)
+                        sel = np.zeros((L)).astype(np.bool_)
                         sel[start_1:end_1] = True
                         sel[start_2:end_2] = True
                        
