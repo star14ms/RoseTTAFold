@@ -4,3 +4,9 @@
 **/*~
 **/.*
 **/*pyc
+
+weights/*
+csblast-2.2.3/*
+output/*
+example/**/*
+data/*

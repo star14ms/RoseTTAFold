@@ -12,7 +12,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 ############################################################
 
-SCRIPT=`realpath -s $0`
+SCRIPT=`realpath -q $0`
 export PIPEDIR=`dirname $SCRIPT`
 
 CPU="8"  # number of CPUs to use
@@ -20,7 +20,7 @@ MEM="64" # max memory (in GB)
 
 # Inputs:
 IN="$1"                # input.fasta
-WDIR=`realpath -s $2`  # working folder
+WDIR=`realpath -q $2`  # working folder
 
 
 LEN=`tail -n1 $IN | wc -m`
